@@ -1,0 +1,43 @@
+class Solution 
+{ 
+    int n;
+    boolean check(int N, int M, ArrayList<ArrayList<Integer>> Edges) 
+    { 
+        n = N;
+        Map<Integer,ArrayList<Integer>> map = new HashMap<>();
+        for(ArrayList<Integer> edges : Edges){
+            int u = edges.get(0);
+            int v = edges.get(1);
+            map.putIfAbsent(u,new ArrayList<>());
+            map.putIfAbsent(v,new ArrayList<>());
+            map.get(u).add(v);
+            map.get(v).add(u);
+        }
+        int cnt = 1;
+        boolean[] visited = new boolean[N+1];
+        for(int i = 1; i<=N; i++){
+            if(dfs(i,map,visited,cnt)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    boolean dfs(int node,Map<Integer,ArrayList<Integer>> map,boolean[] visited,int cnt){
+        if(cnt == (visited.length - 1)){
+            return true;
+        }
+        
+        visited[node] = true;
+        cnt += 1;
+        for(Integer neighbour : map.get(node)){
+            if(!visited[neighbour] && dfs(neighbour,map,visited,cnt)){
+                return true;
+            }
+        }
+        cnt--;
+        visited[node] = false;// backtracking
+        return false;
+    }
+} 
